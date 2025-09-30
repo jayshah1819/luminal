@@ -153,7 +153,6 @@ impl<T: 'static + CudaFloat> Operator for QuantizedMatmul<T> {
 
         // Matvec
         let mut launch_args = stream.launch_builder(&self.matvec_function);
-        get_buffer_from_tensor::<BlockQ8_0>(&inp[1].0); // Matrix
         launch_args.arg(get_buffer_from_tensor::<T>(&inp[0].0)); // Vector
         launch_args.arg(&mut out); // Dest vector
         launch_args.arg(&k); // Src vec size
