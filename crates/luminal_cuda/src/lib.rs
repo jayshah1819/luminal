@@ -4,7 +4,7 @@ mod matmul;
 mod other;
 mod prim;
 mod quantized;
-mod int_8
+
 #[macro_use]
 mod unary;
 pub use quantized::*;
@@ -13,7 +13,7 @@ pub use cudarc::driver::CudaContext;
 pub use elementwise_fusion::ElementwiseFusionCompiler;
 pub use other::*;
 pub use prim::PrimitiveCompiler;
-pub use int_8::*;
+
 
 #[cfg(test)]
 #[macro_use]

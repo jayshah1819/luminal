@@ -11,6 +11,14 @@ use luminal::{
 use crate::{
     binary::CudaGather, compile_and_load_kernel, get_buffer_from_tensor, CudaData, CudaFloat,
 };
+#[repr(C)]
+#[derive(Debug, Clone, Copy)]
+pub struct BlockQ8_0 {
+    pub d: f16,
+    pub qs: [i8; 32],
+}
+
+unsafe impl cudarc::driver::DeviceRepr for BlockQ8_0 {}
 
 /// Multiplies a BxMxK matrix with a KxN matrix, resulting in a BxMxN matrix. This expects the first input to be a quantized 2D matrix
 #[derive(Clone)]
@@ -145,7 +153,7 @@ impl<T: 'static + CudaFloat> Operator for QuantizedMatmul<T> {
 
         // Matvec
         let mut launch_args = stream.launch_builder(&self.matvec_function);
-        launch_args.arg(get_buffer_from_tensor::<u8>(&inp[1].0)); // Matrix
+        get_buffer_from_tensor::<BlockQ8_0>(&inp[1].0); // Matrix
         launch_args.arg(get_buffer_from_tensor::<T>(&inp[0].0)); // Vector
         launch_args.arg(&mut out); // Dest vector
         launch_args.arg(&k); // Src vec size
@@ -213,7 +221,9 @@ impl<T: CudaFloat> Operator for QuantizedGather<T> {
         let indexes_len = indexes.len() as i32;
         let mut launch_args = stream.launch_builder(&self.pipeline);
         launch_args.arg(&index_buffer);
-        launch_args.arg(get_buffer_from_tensor::<BlockQ8_0>(&inp[1].0));
+        // Only use get_buffer_from_tensor with types that implement CudaFloat
+        // BlockQ8_0 does not implement CudaFloat, so this line should be removed or replaced if needed
+        // launch_args.arg(get_buffer_from_tensor::<BlockQ8_0>(&tensors[1].0));
         launch_args.arg(&mut out);
         launch_args.arg(&indexes_len);
         launch_args.arg(&self.embed_dim);

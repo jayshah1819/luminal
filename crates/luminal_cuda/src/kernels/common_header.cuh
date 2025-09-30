@@ -2,8 +2,7 @@
 #include <cuda_fp16.h>
 #include <cuda_runtime.h>
 
-__inline__ __device__ int max(int a, int b) { return (a > b) ? a : b; }
-__inline__ __device__ int min(int a, int b) { return (a < b) ? a : b; }
+
 
 typedef struct {
 	__half d;
@@ -15,6 +14,9 @@ typedef struct {
 	__half d;
 	unsigned char qs[16];
 } block_q4_0;
+
+__inline__ __device__ int max(int a, int b) { return (a > b) ? a : b; }
+__inline__ __device__ int min(int a, int b) { return (a < b) ? a : b; }
 
 __inline__ __device__ float warpReduceSum_optimized(float val) {
 	#pragma unroll
