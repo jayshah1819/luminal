@@ -157,7 +157,7 @@ impl<T: 'static + CudaFloat> Operator for QuantizedMatmul<T> {
             launch_args
                 .launch(LaunchConfig {
                     grid_dim: (n.div_ceil(8) as u32, 1, (m * batch_size) as u32),
-                    block_dim: (8, 8, 1),
+                    block_dim: (128, 1, 1),
                     shared_mem_bytes: 0,
                 })
                 .unwrap();
@@ -213,7 +213,7 @@ impl<T: CudaFloat> Operator for QuantizedGather<T> {
         let indexes_len = indexes.len() as i32;
         let mut launch_args = stream.launch_builder(&self.pipeline);
         launch_args.arg(&index_buffer);
-        launch_args.arg(get_buffer_from_tensor::<u8>(&tensors[1].0));
+        launch_args.arg(get_buffer_from_tensor::<BlockQ8_0>(&inp[1].0));
         launch_args.arg(&mut out);
         launch_args.arg(&indexes_len);
         launch_args.arg(&self.embed_dim);

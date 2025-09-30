@@ -1,7 +1,5 @@
-use cudarc::driver::{CudaContext, CudaDevice, CudaFunction, LaunchConfig};
-use std::sync::Arc;
 
-pub fn check_compute_capability(device: &CudaDevice) -> bool {
+
     // Get device properties
     if let Ok(props) = device.get_device_properties() {
         // Return true for Volta (7.0) and newer

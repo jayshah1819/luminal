@@ -1,17 +1,19 @@
-pub mod binary;
-pub mod elementwise_fusion;
-pub mod matmul;
-pub mod other;
-pub mod prim;
-pub mod quantized;
-pub mod unary;
-pub mod utils; // New utilities module for CUDA functionality
+mod binary;
+mod elementwise_fusion;
+mod matmul;
+mod other;
+mod prim;
+mod quantized;
+mod int_8
+#[macro_use]
+mod unary;
 pub use quantized::*;
 
 pub use cudarc::driver::CudaContext;
 pub use elementwise_fusion::ElementwiseFusionCompiler;
 pub use other::*;
 pub use prim::PrimitiveCompiler;
+pub use int_8::*;
 
 #[cfg(test)]
 #[macro_use]

@@ -2,10 +2,14 @@
 #include <cuda_fp16.h>
 #include <cuda_runtime.h>
 
+__inline__ __device__ int max(int a, int b) { return (a > b) ? a : b; }
+__inline__ __device__ int min(int a, int b) { return (a < b) ? a : b; }
+
 typedef struct {
 	__half d;
 	int8_t qs[32];
 } block_q8_0;
+unsafe impl cudarc::driver::DeviceRepr for BlockQ8_0 {}
 
 typedef struct {
 	__half d;

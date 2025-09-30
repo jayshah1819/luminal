@@ -8,7 +8,7 @@ license = "MIT OR Apache-2.0"
 [dependencies]
 luminal = { path = "../.." }
 cudarc = { version = "0.16.6", features = [
-    "f16",        # Required for INT8 scale factors
+    "f16",       
     "cuda-11080", # CUDA 11.8 for AWS Deep Learning AMI
     "cudnn"       # Required for INT8 optimizations
 ] }
